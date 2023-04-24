@@ -160,6 +160,9 @@ export class Session {
         const fromTyped = async (v) => {
             let x = v.substring(1);
             switch (v[0]) {
+                case 'l': // Boolean
+                    x = x === 'true';
+                    break;
                 case 'b':
                     x = Buffer.from(x, 'base64');
                     break;
@@ -194,7 +197,7 @@ export class Session {
 
         // Do type conversion
         for (const [i, v] of resp.entries())
-            resp[i] = await fromTyped(v);
+            resp[i] = v !== null ? await fromTyped(v) : v;
 
         if (Array.isArray(key))
             return resp;
@@ -279,6 +282,8 @@ export class Session {
     private _prepareUserData(key, value): string[];
     private _prepareUserData(arg0, arg1?): string[] {
         const makeTyped = (v) => {
+            if (typeof v === "boolean" || v instanceof Boolean)
+                return 'l' + v.toString();
             if (v instanceof Buffer)
                 return 'b' + v.toString('base64');
             if (v instanceof Date)
