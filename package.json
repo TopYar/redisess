@@ -55,6 +55,7 @@
     "temp-dir": "./coverage/.nyc_output"
   },
   "scripts": {
+    "prepare": "npm run build",
     "clean": "npm run clean:src && npm run clean:test && npm run clean:dist",
     "clean:dist": "ts-cleanup -d dist --remove-dirs --all",
     "clean:src": "ts-cleanup -s src --all",
